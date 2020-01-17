@@ -3,14 +3,18 @@
     <div class="container is-centered">
       <div class="column pt-0">
         <PostCard v-for="post in Posts" :key="post.id" :post="post" :preview="true" />
-        <Pagination :currentPostPage="currentPostPage + 1" :showPostPerPage="showPostPerPage" />
+        <Pagination
+          :currentPostPage="currentPostPage + 1"
+          :showPostPerPage="showPostPerPage"
+          :key="'pagination'+currentPostPage"
+        />
       </div>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import PostCard from "@/components/post-card.vue";
 import Pagination from "@/components/pagination.vue";
 import IPost from "@/models/post";
@@ -24,6 +28,7 @@ import Axios from "axios";
 })
 export default class PostList extends Vue {
   @Prop() userId!: number;
+  @Prop() page!: string;
   currentPostPage: number = 0;
   showPostPerPage: number = 10;
 
@@ -32,15 +37,13 @@ export default class PostList extends Vue {
     posts = posts.sort((a, b) => {
       return a.id - b.id;
     });
-    console.log(posts);
-    posts = posts.slice(
-      this.currentPostPage * this.showPostPerPage
-    );
-    console.log(posts);
-    console.log(
-      this.currentPostPage * this.showPostPerPage,
-      this.showPostPerPage
-    );
+    if (posts.length >= this.showPostPerPage) {
+      posts = posts.slice(
+        this.currentPostPage * this.showPostPerPage,
+        this.showPostPerPage + this.currentPostPage * this.showPostPerPage
+      );
+    }
+
     return posts;
   }
 
@@ -57,7 +60,17 @@ export default class PostList extends Vue {
   }
   mounted() {
     if (this.$route.params.page) {
+      console.log(this.$route.params.page);
       this.currentPostPage = parseInt(this.$route.params.page) - 1;
+    }
+    this.getCurrentPagePosts();
+  }
+  @Watch("$route", { immediate: true, deep: true })
+  onUrlChange(newVal: any) {
+    if (newVal.params.page) {
+      this.currentPostPage = newVal.params.page - 1;
+    } else {
+      this.currentPostPage = 0;
     }
     this.getCurrentPagePosts();
   }

@@ -17,7 +17,7 @@ const routes = [
     {
         path: '/posts/:page',
         name: 'post-list',
-        component: PostList,
+        component: Base,
         props: true
     },
     {

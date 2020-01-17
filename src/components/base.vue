@@ -17,9 +17,11 @@ import store from "@/store";
   }
 })
 export default class Base extends Vue {
+
   get User() {
     return store.getters.getUser;
   }
+
 }
 </script>
 

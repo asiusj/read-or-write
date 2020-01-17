@@ -3,7 +3,7 @@
     <hr />
     <b-pagination
       :total="postsCount"
-      :current.sync="currentPostPage"
+      :current.sync="currentPage"
       :range-before="1"
       :range-after="1"
       :per-page="showPostPerPage"
@@ -19,8 +19,23 @@
         :page="props.page"
         :id="`page${props.page.number}`"
         tag="router-link"
-        :to="`/posts/${props.page.number}`"
+        :to="{name: 'post-list', params: {page: props.page.number}}"
       >{{ props.page.number }}</b-pagination-button>
+      <b-pagination-button
+        slot="previous"
+        slot-scope="props"
+        :page="props.page"
+        tag="router-link"
+        :to="{name: 'post-list', params: {page: props.page.number}}"
+      ><b-icon icon="chevron-left"></b-icon></b-pagination-button>
+
+      <b-pagination-button
+        slot="next"
+        slot-scope="props"
+        :page="props.page"
+        tag="router-link"
+        :to="{name: 'post-list', params: {page: props.page.number}}"
+      ><b-icon icon="chevron-right"></b-icon></b-pagination-button>
     </b-pagination>
   </section>
 </template>
@@ -34,13 +49,15 @@ import Axios from "axios";
 @Component({
   data() {
     return {
-      postsCount: 0
+      postsCount: 0,
+      currentPage: 0
     };
   }
 })
 export default class Pagination extends Vue {
   @Prop() currentPostPage!: number;
   @Prop() showPostPerPage!: number;
+  currentPage!: number;
   postsCount!: number;
   getAllPostsCount() {
     Axios.get<IPost[]>(process.env.VUE_APP_API_URL + "/posts").then(
@@ -50,6 +67,7 @@ export default class Pagination extends Vue {
     );
   }
   mounted() {
+    this.currentPage = this.currentPostPage;
     this.getAllPostsCount();
   }
 }
