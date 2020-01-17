@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="container is-centered">
+    <div class="container is-centered" v-if="Posts.length">
       <div class="column pt-0">
         <PostCard v-for="post in Posts" :key="post.id" :post="post" :preview="true" />
         <Pagination
@@ -10,20 +10,35 @@
         />
       </div>
     </div>
+    <NoConnection v-else/>
   </section>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+  Provide,
+  PropSync
+} from "vue-property-decorator";
 import PostCard from "@/components/post-card.vue";
 import Pagination from "@/components/pagination.vue";
 import IPost from "@/models/post";
 import Axios from "axios";
+import NoConnection from "@/views/no-connection.vue";
 
 @Component({
   components: {
     PostCard,
-    Pagination
+    Pagination,
+    NoConnection
+  },
+  data() {
+    return {
+      // Posts: []
+    };
   }
 })
 export default class PostList extends Vue {
@@ -31,7 +46,8 @@ export default class PostList extends Vue {
   @Prop() page!: string;
   currentPostPage: number = 0;
   showPostPerPage: number = 10;
-
+  posts!: IPost[];
+  // @Provide() Posts: IPost[] = this.getPosts();
   get Posts(): IPost[] {
     let posts: IPost[] = this.$store.getters.getAllPosts;
     posts = posts.sort((a, b) => {

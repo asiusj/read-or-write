@@ -78,6 +78,6 @@ export default new Vuex.Store({
         getAllPosts: (state): IPost[] => {
             return state.cache.allPost;
         }
-    }
-    // plugins: [createPersistedState()]
+    },
+    plugins: [createPersistedState()]
 });

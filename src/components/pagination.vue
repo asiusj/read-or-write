@@ -1,5 +1,5 @@
 <template>
-  <section class="max-width-550 container">
+  <section v-if="postsCount" class="max-width-550 container">
     <hr />
     <b-pagination
       :total="postsCount"

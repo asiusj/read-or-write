@@ -9,6 +9,11 @@
       <template slot="start">
         <b-navbar-item tag="router-link" :to="{ path: '/' }">Home</b-navbar-item>
         <b-navbar-item tag="router-link" :to="{ path: '/about' }">About</b-navbar-item>
+        <b-navbar-item
+          v-if="User.role===1"
+          tag="router-link"
+          :to="{ path: '/user', params: {userId: User.id} }"
+        >My Posts</b-navbar-item>
       </template>
       <template slot="end">
         <b-navbar-item tag="router-link" v-if="!User.id" :to="{ path: '/auth' }">Auth, guest</b-navbar-item>

@@ -45,8 +45,6 @@ export default class Auth extends Vue {
     ).then(response => {
       if (response.data.length) {
         let user: AppUser = response.data[0];
-        console.log(user);
-        console.log("\n" + this.password);
         if (user.password === this.password) {
           this.$store.dispatch("SetUser", user);
         } else {

@@ -29,7 +29,7 @@ const routes = [
     {
         path: '/user/:userId',
         name: 'user',
-        component: Post,
+        component: Base,
         props: true
     },
     {
