@@ -1,0 +1,137 @@
+// Import Bulma's core
+@import '~bulma/sass/utilities/_all';
+
+// Set your colors
+$primary: #8c67ef;
+$primary-invert: findColorInvert($primary);
+$twitter: #4099ff;
+$twitter-invert: findColorInvert($twitter);
+$secondary: #000;
+$secondary-invert: findColorInvert($secondary);
+$headers-bg: #291711;
+$headers-bg-invert: findColorInvert($headers-bg);
+$headers2-bg: #291711;
+// Setup $colors to use as bulma classes (e.g. 'is-twitter')
+$colors: (
+    'white': (
+        $white,
+        $black
+    ),
+    'black': (
+        $black,
+        $white
+    ),
+    'light': (
+        $light,
+        $light-invert
+    ),
+    'dark': (
+        $dark,
+        $dark-invert
+    ),
+    'primary': (
+        $primary,
+        $primary-invert
+    ),
+    'info': (
+        $info,
+        $info-invert
+    ),
+    'success': (
+        $success,
+        $success-invert
+    ),
+    'warning': (
+        $warning,
+        $warning-invert
+    ),
+    'danger': (
+        $danger,
+        $danger-invert
+    ),
+    'twitter': (
+        $twitter,
+        $twitter-invert
+    ),
+    'secondary': (
+        $secondary,
+        $secondary-invert
+    ),
+    'headers-bg': (
+        $headers-bg,
+        $headers-bg-invert
+    )
+);
+
+// Links
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+// Import Bulma and Buefy styles
+@import '~bulma';
+@import '~buefy/src/scss/buefy';
+
+.form {
+    max-width: 365px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+html {
+    background-color: #ebebeb;
+}
+
+body {
+    font-size: 1.1em;
+    font-weight: 400;
+    line-height: 1.6;
+}
+.margin-top-32 {
+    margin-top: 32px;
+}
+.j-right {
+    justify-content: flex-end !important;
+}
+.max-width-550 {
+    max-width: 550px;
+}
+.pt-0 {
+    padding-top: 0 !important;
+}
+.items-baseline {
+    align-items: baseline;
+}
+.items-flex-end {
+    align-items: flex-end;
+}
+
+.j-between {
+    justify-content: space-between !important;
+}
+.full-width {
+    width: 100%;
+}
+.flex-column {
+    flex-direction: column;
+}
+.font-size-min {
+    font-size: 0.75em;
+}
+.p-1 {
+    padding: 4px;
+}
+.p-2 {
+    padding: 8px;
+}
+.p-0-1 {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.p-0-2 {
+    padding-left: 8px;
+    padding-right: 8px;
+}
