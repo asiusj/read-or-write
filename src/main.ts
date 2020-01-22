@@ -15,8 +15,9 @@ Vue.filter('dateFormat', (date: string) => {
     }
 });
 
-Vue.filter('descriptionLength', (text: string) => {
-    return text.substr(0, 150) + '...';
+Vue.filter('substr', (text: string, max: number = 150) => {
+    if (text.length > max) return text.substr(0, max) + '...';
+    return text;
 });
 
 new Vue({

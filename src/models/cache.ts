@@ -1,7 +1,7 @@
 import IPost from './post';
 
 export default interface Cache {
-    allPost: IPost[];
+    allPosts: IPost[];
     textPages: ITextPage[];
 }
 

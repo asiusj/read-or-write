@@ -8,6 +8,7 @@ export default interface IPost {
     description: string;
     fullText: string | InnerHTML;
     createdAt: Date | string;
-    updateAt: Date | string;
+    updatedAt: Date | string;
     likes: number;
+    usersLiked: number[];
 }

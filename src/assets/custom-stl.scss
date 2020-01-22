@@ -11,6 +11,8 @@ $secondary-invert: findColorInvert($secondary);
 $headers-bg: #291711;
 $headers-bg-invert: findColorInvert($headers-bg);
 $headers2-bg: #291711;
+$favourite: #c3c3c3;
+$favourite-invert: findColorInvert($favourite);
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
     'white': (
@@ -60,7 +62,11 @@ $colors: (
     'headers-bg': (
         $headers-bg,
         $headers-bg-invert
-    )
+    ),
+    'favourite': (
+        $favourite,
+        $favourite-invert
+    ),
 );
 
 // Links
@@ -134,4 +140,10 @@ body {
 .p-0-2 {
     padding-left: 8px;
     padding-right: 8px;
+}
+.flex-1-0-auto {
+    flex: 1 0 auto;
+}
+.flex-wrap {
+    flex-wrap: wrap;
 }

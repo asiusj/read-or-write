@@ -1,6 +1,6 @@
 <template>
   <section>
-    <PostCard v-if="Post" :post="Post" />
+    <PostCard v-if="Post" :incomingPost="Post" />
   </section>
 </template>
 

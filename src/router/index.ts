@@ -5,6 +5,7 @@ import Post from '@/components/post.vue';
 import TextPage from '@/components/text-page.vue';
 import Auth from '@/components/auth.vue';
 import PostList from '@/components/post-list.vue';
+import PostCard from '@/components/post-card.vue';
 
 Vue.use(VueRouter);
 
@@ -27,7 +28,13 @@ const routes = [
         props: true
     },
     {
-        path: '/user/:userId',
+        path: '/new',
+        name: 'new',
+        component: PostCard,
+        props: true
+    },
+    {
+        path: '/user/:userId/:page?',
         name: 'user',
         component: Base,
         props: true

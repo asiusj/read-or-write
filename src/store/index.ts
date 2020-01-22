@@ -11,45 +11,62 @@ export default new Vuex.Store({
     state: {
         user: Guest as AppUser,
         cache: {
-            allPost: [],
-            textPages: [],
-            userPosts: []
+            allPosts: [],
+            textPages: []
         } as Cache
     },
     mutations: {
         setUser: (state, user: AppUser) => {
-            state.user = user;
+            Vue.set(state, 'user', user);
         },
         setAllPosts: (state, posts: IPost[]) => {
-            if (state.cache.allPost.length) {
+            if (state.cache.allPosts.length) {
                 posts = posts.filter(post => {
                     let notExist = true;
-                    state.cache.allPost.forEach(existingPost => {
+                    state.cache.allPosts.forEach(existingPost => {
                         if (existingPost.id === post.id) {
                             notExist = false;
                         }
                     });
                     return notExist;
                 });
-                state.cache.allPost = [...state.cache.allPost, ...posts];
+                state.cache = {
+                    ...state.cache,
+                    allPosts: [...state.cache.allPosts, ...posts]
+                };
             } else {
-                state.cache.allPost = posts;
+                state.cache = { ...state.cache, allPosts: posts };
             }
         },
         updatePost: (state, post: IPost) => {
-            let postIndex = state.cache.allPost.findIndex(item => {
+            let postIndex = state.cache.allPosts.findIndex(item => {
                 if (item.id === post.id) {
                     return true;
                 }
             });
-            state.cache.allPost[postIndex] = post;
+            Vue.set(state.cache.allPosts, postIndex, post);
+        },
+        deletePost: (state, postId: number) => {
+            let postIndex = state.cache.allPosts.findIndex(item => {
+                if (item.id === postId) {
+                    return true;
+                }
+            });
+            let newCache = state.cache;
+            newCache.allPosts.splice(postIndex, 1);
+            state = { ...state, cache: newCache };
+        },
+        addNewPost: (state, post: IPost) => {
+            let newCache = state.cache;
+            newCache.allPosts.push(post);
+            state = { ...state, cache: newCache };
         }
     },
     actions: {
         SetUser: (ctx, user: AppUser) => {
             ctx.commit('setUser', user);
         },
-        SetAllPosts: (ctx, posts: IPost[] | IPost) => {
+        SetPosts: (ctx, posts: IPost[] | IPost) => {
             let p = posts as IPost[];
             if (!p.length) {
                 p = new Array();
@@ -62,6 +79,12 @@ export default new Vuex.Store({
         },
         UpdatePost: (ctx, post: IPost) => {
             ctx.commit('updatePost', post);
+        },
+        DeletePost: (ctx, postId: number) => {
+            ctx.commit('deletePost', postId);
+        },
+        AddNewPost: (ctx, post: IPost) => {
+            ctx.commit('addNewPost', post);
         }
     },
     modules: {},
@@ -69,14 +92,14 @@ export default new Vuex.Store({
         getUser: state => {
             return state.user;
         },
-        getUserPosts: (state, userId: number): IPost[] => {
-            let userPosts = state.cache.allPost.filter(item => {
-                return item.userId === userId;
+        getUserPosts: state => {
+            let userPosts = state.cache.allPosts.filter(item => {
+                return item.userId === state.user.id;
             });
             return userPosts;
         },
         getAllPosts: (state): IPost[] => {
-            return state.cache.allPost;
+            return state.cache.allPosts;
         }
     },
     plugins: [createPersistedState()]

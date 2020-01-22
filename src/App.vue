@@ -12,8 +12,9 @@
         <b-navbar-item
           v-if="User.role===1"
           tag="router-link"
-          :to="{ path: '/user', params: {userId: User.id} }"
+          :to="{ name: 'user', params: {userId: User.id} }"
         >My Posts</b-navbar-item>
+        <b-navbar-item v-if="User.role===1" tag="router-link" :to="{ name: 'new', params: {editMode: true} }"><b-icon size="is-small" icon="plus"></b-icon><span>Add new post</span></b-navbar-item>
       </template>
       <template slot="end">
         <b-navbar-item tag="router-link" v-if="!User.id" :to="{ path: '/auth' }">Auth, guest</b-navbar-item>

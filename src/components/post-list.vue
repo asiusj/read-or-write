@@ -2,15 +2,15 @@
   <section>
     <div class="container is-centered" v-if="Posts.length">
       <div class="column pt-0">
-        <PostCard v-for="post in Posts" :key="post.id" :post="post" :preview="true" />
+        <PostCard v-for="post in Posts" :key="post.id" :incomingPost="post" :preview="true" />
         <Pagination
-          :currentPostPage="currentPostPage + 1"
+          :currentPostPage="currentPostPage"
           :showPostPerPage="showPostPerPage"
           :key="'pagination'+currentPostPage"
         />
       </div>
     </div>
-    <NoConnection v-else/>
+    <NoConnection v-else />
   </section>
 </template>
 
@@ -34,32 +34,26 @@ import NoConnection from "@/views/no-connection.vue";
     PostCard,
     Pagination,
     NoConnection
-  },
-  data() {
-    return {
-      // Posts: []
-    };
   }
 })
 export default class PostList extends Vue {
-  @Prop() userId!: number;
-  @Prop() page!: string;
-  currentPostPage: number = 0;
+  currentPostPage: number = 1;
   showPostPerPage: number = 10;
   posts!: IPost[];
-  // @Provide() Posts: IPost[] = this.getPosts();
+
   get Posts(): IPost[] {
-    let posts: IPost[] = this.$store.getters.getAllPosts;
+    let posts: IPost[] = this.$route.params.userId
+      ? this.$store.getters.getUserPosts
+      : this.$store.getters.getAllPosts;
     posts = posts.sort((a, b) => {
       return a.id - b.id;
     });
     if (posts.length >= this.showPostPerPage) {
       posts = posts.slice(
-        this.currentPostPage * this.showPostPerPage,
-        this.showPostPerPage + this.currentPostPage * this.showPostPerPage
+        (this.currentPostPage - 1) * this.showPostPerPage,
+        this.showPostPerPage + (this.currentPostPage - 1) * this.showPostPerPage
       );
     }
-
     return posts;
   }
 
@@ -68,25 +62,27 @@ export default class PostList extends Vue {
       process.env.VUE_APP_API_URL +
         "/posts?_limit=" +
         this.showPostPerPage +
-        "&_start=" +
-        this.currentPostPage * this.showPostPerPage
+        "&_page=" +
+        this.currentPostPage +
+        (this.$route.params.userId
+          ? "&_userId=" + this.$route.params.userId
+          : "")
     ).then(response => {
-      this.$store.dispatch("SetAllPosts", response.data);
+      this.$store.dispatch("SetPosts", response.data);
     });
   }
   mounted() {
     if (this.$route.params.page) {
-      console.log(this.$route.params.page);
-      this.currentPostPage = parseInt(this.$route.params.page) - 1;
+      this.currentPostPage = parseInt(this.$route.params.page);
     }
     this.getCurrentPagePosts();
   }
   @Watch("$route", { immediate: true, deep: true })
   onUrlChange(newVal: any) {
     if (newVal.params.page) {
-      this.currentPostPage = newVal.params.page - 1;
+      this.currentPostPage = newVal.params.page;
     } else {
-      this.currentPostPage = 0;
+      this.currentPostPage = 1;
     }
     this.getCurrentPagePosts();
   }
